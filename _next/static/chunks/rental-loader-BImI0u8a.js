@@ -1,0 +1,1 @@
+import{r as e}from"./framework-D_rUT4EX.js";var t=e();function n({message:e=`Finding your next home…`}){return(0,t.jsxs)(`div`,{className:`rental-loader`,role:`status`,children:[(0,t.jsx)(`span`,{className:`rental-loader-logo`,children:(0,t.jsx)(`img`,{src:`/images/logo.webp`,alt:``})}),(0,t.jsx)(`p`,{children:e})]})}export{n as t};

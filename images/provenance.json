@@ -1,0 +1,42 @@
+[
+  {
+    "source": "IMG_6920.jpg",
+    "output": "public/images/home.webp",
+    "usage": "home"
+  },
+  {
+    "source": "5-DSC03444.jpg",
+    "output": "public/images/office.webp",
+    "usage": "office"
+  },
+  {
+    "source": "IMG_6553.jpg",
+    "output": "public/images/house.webp",
+    "usage": "house"
+  },
+  {
+    "source": "IMG_1082.jpg",
+    "output": "public/images/apartments.webp",
+    "usage": "apartments"
+  },
+  {
+    "source": "3-DSC02897.jpg",
+    "output": "public/images/temple-mural.webp",
+    "usage": "temple-mural"
+  },
+  {
+    "source": "4-DSC02985.jpg",
+    "output": "public/images/trail.webp",
+    "usage": "trail"
+  },
+  {
+    "source": "2-IMG_3188.jpg",
+    "output": "public/images/kitchen.webp",
+    "usage": "kitchen"
+  },
+  {
+    "source": "2-DSC02867.jpg",
+    "output": "public/images/stadium.webp",
+    "usage": "stadium"
+  }
+]

@@ -44,22 +44,30 @@ aptly-static-export/
 ├── _next/                                                          ← built JS/CSS assets
 ├── _shell/index.html                                               ← page chrome reused by the live-render middleware (see below)
 ├── _headers                                                        ← Cloudflare Pages cache rules
+├── images/, videos/                ← committed directly (see note below — do NOT gitignore these)
 ├── functions/
 │   ├── homes/_middleware.js        ← live-renders /homes/<id>
 │   ├── api/                        ← ported API route handlers
 │   └── _lib/                       ← listings/schools/communities fetch logic, ported from lib/
-├── copy-public-assets.mjs          ← build step: copies ../public/images + ../public/videos in (not committed here, see below)
-├── .gitignore                      ← ignores images/ and videos/ (populated by copy-public-assets.mjs)
 └── tools/
     ├── crawl-static-pages.mjs      ← regenerate the static snapshot (everything except /homes/<id>)
-    └── refresh-shell.mjs           ← regenerate _shell/index.html (rare — see the script's own comment)
+    ├── refresh-shell.mjs           ← regenerate _shell/index.html (rare — see the script's own comment)
+    └── resync-public-assets.mjs    ← re-copy ../public/images + ../public/videos in after they change (optional, manual — see below)
 ```
 
-`images/` and `videos/` aren't committed in this directory — they're the exact same
-files already tracked at `../public/images` and `../public/videos` (confirmed
-byte-for-byte identical at conversion time), so duplicating them here would just be
-~76MB of dead weight in git. `copy-public-assets.mjs` copies the current ones in as a
-build step instead — see the Cloudflare Pages setup below.
+`images/` and `videos/` **are committed directly in this directory**, duplicating the
+same files tracked at `../public/images` and `../public/videos`. This is deliberate, not
+an oversight: this directory is meant to be importable as a pure static mirror (no build
+step) via Aptly's own site-import tooling, which mirrors exactly what's committed under a
+`sourceSubdir` with no build command and no access to anything outside that subdirectory
+— an earlier version of this README described a build-time copy step instead
+(`copy-public-assets.mjs`, since removed) to avoid the ~76MB of duplication, but that
+approach silently produced a site with every image and video broken when actually
+imported this way, since there was no build phase to run the copy and no sibling
+`../public` once the subdirectory was mirrored on its own. If `public/images` or
+`public/videos` change in the real app, re-run `tools/resync-public-assets.mjs` from
+inside this directory and commit the result — don't reintroduce a build-time copy step
+for these files.
 
 ## How `functions/homes/_middleware.js` works
 
@@ -92,7 +100,8 @@ build step instead — see the Cloudflare Pages setup below.
 ## Deploying (Cloudflare Pages project settings)
 
 - **Root directory**: `aptly-static-export`
-- **Build command**: `node copy-public-assets.mjs`
+- **Build command**: none — everything needed is already committed, served as pure
+  static assets + Pages Functions.
 - **Build output directory**: `aptly-static-export` (or `.` if the root directory above
   already scopes the build to this folder — check whichever convention the rest of
   Aptly's Pages projects use)

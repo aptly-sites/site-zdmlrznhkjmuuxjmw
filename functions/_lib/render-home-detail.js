@@ -190,7 +190,7 @@ ${renderGallery(l)}
       <details class="rental-faq"><summary>What costs should I plan for?</summary><p>Listed monthly rent is ${money(
         l.rent
       )} and the security deposit is ${money(l.deposit)}. Application fees, any recurring charges, and final lease terms should be confirmed with our team.</p></details>
-      <details class="rental-faq"><summary>What do I need to apply?</summary><p>Review Spradley’s current requirements before submitting an application.</p><a class="text-link" href="https://spradleyproperties.com/application-requirements/">Application requirements ↗</a></details>
+      <details class="rental-faq"><summary>What do I need to apply?</summary><p>Review Spradley’s current requirements before submitting an application.</p><a class="text-link" href="/application-requirements/">Application requirements ↗</a></details>
     </section>
   </div>
   <aside class="rental-booking">

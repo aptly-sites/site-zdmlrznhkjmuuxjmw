@@ -1,0 +1,9 @@
+Copied from the live Spradley website on 2026-10-16.
+https://spradleyproperties.com/data-privacy-policy/
+https://spradleyproperties.com/wp-content/uploads/2021/05/Texas-Real-Estate-Commission-Consumer-Protection-Notice.pdf
+https://spradleyproperties.com/wp-content/uploads/2026/06/Information-About-Broker-Services-Spradley-Propeties.pdf
+Policy wording preserved from https://spradleyproperties.com/data-privacy-policy/
+CCIM/NARPM logos copied from the live footer.
+Reviews reuse existing Birdeye widget bid=161763138133524, wno=8.
+
+Migration audit 2026-10-16: application requirements, community resources, SMS terms and linked PDFs copied locally. No legacy scripts/styles retained. Review excerpt rendered in local HTML from the existing Birdeye feed, John Aguilar, 2026-10-14; static snapshot, not auto-updating.

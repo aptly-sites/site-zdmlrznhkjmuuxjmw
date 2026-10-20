@@ -1,3 +1,7 @@
 wrangler.json
 .dev.vars
 .vite
+
+.dev.vars*
+.env*
+tests

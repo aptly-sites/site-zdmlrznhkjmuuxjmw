@@ -1,0 +1,20 @@
+.native-lead-form {position:relative;min-width:0;background:#fff;border-radius:16px;padding:clamp(20px,3vw,36px);color:#252525;scroll-margin-top:110px}
+.native-lead-form .contact-form-heading {margin-bottom:24px}
+.native-lead-form h3 {font-size:1.5rem;line-height:1.2;margin:0 0 12px}
+.native-lead-form .contact-form-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.native-lead-form label {display:flex;flex-direction:column;gap:7px;font-size:14px;min-width:0}
+.native-lead-form .contact-field-wide {grid-column:1/-1}
+.native-lead-form input:not([type=checkbox]),.native-lead-form select,.native-lead-form textarea {width:100%;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #ccc;border-radius:7px;font:inherit;color:inherit;background:#fff;box-sizing:border-box}
+.native-lead-form textarea {resize:vertical}
+.native-lead-form input:focus-visible,.native-lead-form select:focus-visible,.native-lead-form textarea:focus-visible {outline:2px solid #b5101a;outline-offset:2px}
+.native-lead-form .contact-consent {flex-direction:row;align-items:flex-start;gap:10px;margin:18px 0;line-height:1.5}
+.native-lead-form input[type=checkbox] {flex:0 0 auto;margin:4px 0;width:17px;height:17px;accent-color:#b5101a}
+.native-lead-form .contact-consent a {text-decoration:underline}
+.native-lead-form .contact-honeypot {position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.native-lead-form button:disabled {opacity:.6;cursor:wait}
+.native-lead-form .contact-form-status {margin:16px 0 0;line-height:1.5}
+.native-lead-form .error {color:#a00}.native-lead-form .success {color:#236333}
+.native-inquiry-section {padding-top:48px;padding-bottom:64px;max-width:960px}
+.native-inquiry-section>h2 {margin-bottom:24px}
+.city-owner-form>.native-lead-form {padding:0}
+@media(max-width:520px){.native-lead-form .contact-form-grid{grid-template-columns:1fr}.native-lead-form .contact-field-wide{grid-column:auto}}

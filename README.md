@@ -106,9 +106,9 @@ for these files.
   already scopes the build to this folder — check whichever convention the rest of
   Aptly's Pages projects use)
 - **Environment variables** (used by `functions/api/**` and the live-render path):
-  - `APTLY_API_TOKEN` — required. Aptly board API token used by `functions/api/owner-lead.js` to create the lead card.
-  - `APTLY_OWNER_LEADS_BOARD_ID` — optional, falls back to the board ID hardcoded as `DEFAULT_BOARD` in `owner-lead.js`.
-  - `GREATSCHOOLS_API_KEY` — optional. Without it, the nearby-schools widgets on listing/area pages degrade to "School information is currently unavailable" (`functions/api/listings/[id]/schools.js`, `functions/api/areas/[slug]/schools.js`) rather than erroring.
+  - `APTLY_TOKEN` — required (the older `APTLY_API_TOKEN` name is also accepted). Aptly board API token used by `functions/api/owner-lead.js` to create the lead card.
+  - Lead destination: Owner Leads board `mEmpbDg7nY7Z7FfJn`, stage `New Leads`. The browser cannot override the board.
+  - `GREAT_SCHOOLS` — required for school data (the older `GREATSCHOOLS_API_KEY` name is also accepted). Without it, the nearby-schools widgets on listing/area pages degrade to "School information is currently unavailable" (`functions/api/listings/[id]/schools.js`, `functions/api/areas/[slug]/schools.js`) rather than erroring.
 
 ## Keeping the static snapshot current
 
@@ -117,3 +117,39 @@ any content change to a static page, an area page, or an owner calculator, and c
 the result. `/homes/<id>` never needs this — it's always live. `/homes` (the search page)
 should also get a periodic re-crawl even without a content change, per the known
 limitation above.
+
+
+## Native inquiries and local API preview
+
+Contact, Owners, all eight city pages, and all four owner calculators use the same
+native form and `POST /api/owner-lead`. Rental search, resident FAQ search, and
+calculator updates are local controls and do not create leads. Rental applications,
+tours, and resident portal requests remain in their respective external services.
+The temporary website approval panel is a separate launch-review tool.
+
+- `native-forms.js` submits contact details, rental property address, source page,
+  property qualifications, and (when selected) calculator assumptions and results.
+- `GET /api/owner-lead-options` reads the configured board's service/property-type
+  choices and checks routing without writing a contact or card. Only public form
+  option labels are returned; credentials and field IDs stay on the server.
+- `functions/_lib/owner-leads.js` resolves fields by exact labels, including Bed Count,
+  Bath Count, Sq Ft, Market Rent, and Notes. Unmatched optional values remain in Notes.
+- Success requires a card ID from Aptly. Required mapping, stage, permissions, and
+  upstream failures return an error; entered information stays in the form.
+- Enable board API access and give the token schema/configuration read access plus
+  contact/card creation permissions. Configure secrets in Aptly hosting and redeploy
+  so the active deployment receives them.
+
+For local API testing, use a Cloudflare Pages Functions runtime, not Python's static
+HTTP server. Put secrets in ignored `.dev.vars` (`APTLY_TOKEN=...`, `GREAT_SCHOOLS=...`).
+Never commit this file. With Node 22+ and Wrangler installed:
+
+```sh
+wrangler pages dev . --port 4180 --compatibility-date=2026-05-22
+node --experimental-default-type=module --test tests/*.test.mjs
+PREVIEW_URL=http://127.0.0.1:4180 node tests/browser-forms.cjs
+```
+
+The browser check needs Playwright and Chrome. It intercepts lead/configuration
+requests with fixtures and does not create real contacts or cards. A live lead
+check is a separate, clearly labeled test on the hosted site.

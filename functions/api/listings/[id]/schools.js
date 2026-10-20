@@ -1,7 +1,7 @@
 // Ported from app/api/listings/[id]/schools/route.ts — logic unchanged, including its
 // per-isolate rate-limit window (a real limit on the whole warm Worker instance, same
 // approximation the source Next.js server made for its own single "server instance").
-// GREATSCHOOLS_API_KEY comes from env (Cloudflare Pages env var), not process.env.
+// GREAT_SCHOOLS is a server-side secret; keep the older name as a fallback.
 import { getListings } from '../../../_lib/listings.js';
 import { hasCoordinates } from '../../../_lib/listing-utils.js';
 import { fetchSchools } from '../../../_lib/schools.js';
@@ -19,7 +19,7 @@ export async function onRequestGet({ params, env }) {
     const listing = (await getListings()).find(home => home.id === id);
     if (!listing) return reply({ status: 'unavailable' }, 404);
     if (!hasCoordinates(listing)) return reply({ status: 'no-location', schools: [] });
-    const key = env.GREATSCHOOLS_API_KEY;
+    const key = (env.GREAT_SCHOOLS || env.GREATSCHOOLS_API_KEY);
     if (!key) return reply({ status: 'unavailable' }, 503);
     const now = Date.now();
     if (now - windowStart >= 1000) {

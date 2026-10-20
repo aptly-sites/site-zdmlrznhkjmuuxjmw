@@ -1,5 +1,5 @@
 // Ported from app/api/areas/[slug]/schools/route.ts — logic unchanged.
-// GREATSCHOOLS_API_KEY comes from env (Cloudflare Pages env var), not process.env.
+// GREAT_SCHOOLS is a server-side secret; keep the older name as a fallback.
 import { communities } from '../../../_lib/communities.js';
 import { fetchCitySchools } from '../../../_lib/schools.js';
 
@@ -10,10 +10,10 @@ export async function onRequestGet({ params, env }) {
   const { slug } = params;
   const city = communities.find(c => c.slug === slug);
   if (!city) return Response.json({ status: 'unavailable' }, { status: 404, headers });
-  if (!env.GREATSCHOOLS_API_KEY || active >= 3) return Response.json({ status: 'unavailable' }, { status: 503, headers });
+  if (!(env.GREAT_SCHOOLS || env.GREATSCHOOLS_API_KEY) || active >= 3) return Response.json({ status: 'unavailable' }, { status: 503, headers });
   active++;
   try {
-    return Response.json({ status: 'ready', schools: await fetchCitySchools(city.name.replace('’', "'"), env.GREATSCHOOLS_API_KEY) }, { headers });
+    return Response.json({ status: 'ready', schools: await fetchCitySchools(city.name.replace('’', "'"), (env.GREAT_SCHOOLS || env.GREATSCHOOLS_API_KEY)) }, { headers });
   } catch {
     return Response.json({ status: 'unavailable' }, { status: 503, headers });
   } finally {

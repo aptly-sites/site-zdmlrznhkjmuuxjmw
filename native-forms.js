@@ -23,7 +23,7 @@
     choicesPromise ||= fetch('/api/owner-lead-options').then(r=>r.ok?r.json():null).catch(()=>null);
     choicesPromise.then(config=>{
       if (!config?.ready) return;
-      for (const [name,values] of [['goal',config.services],['propertyType',config.propertyTypes]]) {
+      for (const [name,values] of [['goal',config.services],['propertyType',config.propertyTypes],['propertyStatus',config.propertyStatuses]]) {
         if (!values?.length) continue;
         const select=form.elements[name], previous=select.value;
         select.replaceChildren(new Option(name==='goal'?'Select a service':'Select if known',''),...values.map(v=>new Option(v,v)));

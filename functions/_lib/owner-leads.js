@@ -62,7 +62,7 @@ export function normalizeLead(body, request) {
   return {
     firstName,lastName,email,phone,pageUrl,
     address:clean(body.address,280), comments:clean(body.comments,3000), goal:clean(body.goal,120),
-    propertyType:clean(body.propertyType,80), bedrooms:numeric(body.bedrooms,100), bathrooms:numeric(body.bathrooms,100),
+    propertyStatus:clean(body.propertyStatus,100), propertyType:clean(body.propertyType,80), bedrooms:numeric(body.bedrooms,100), bathrooms:numeric(body.bathrooms,100),
     squareFeet:numeric(body.squareFeet,10000000), monthlyRent:numeric(body.monthlyRent,10000000),
     formSource:clean(body.formSource,180) || 'Website inquiry',pageTitle:clean(body.pageTitle,200),
     smsConsent:body.smsConsent === true, termsAccepted:true,
@@ -82,7 +82,7 @@ export function prepareCard(fields, lead) {
     `Name: ${lead.firstName} ${lead.lastName}`,`Email: ${lead.email}`,`Phone: ${lead.phone}`,
     `Terms accepted: Yes`, `SMS consent: ${lead.smsConsent ? 'Yes' : 'No'}`, `Submitted: ${new Date().toISOString()}`,'',
     `Rental property address: ${lead.address || 'Not provided'}`, `Service: ${lead.goal || 'Not provided'}`,
-    `Property type: ${lead.propertyType || 'Not provided'}`,`Beds: ${lead.bedrooms ?? 'Not provided'}`,`Baths: ${lead.bathrooms ?? 'Not provided'}`,
+    `Property status: ${lead.propertyStatus || 'Not provided'}`, `Property type: ${lead.propertyType || 'Not provided'}`,`Beds: ${lead.bedrooms ?? 'Not provided'}`,`Baths: ${lead.bathrooms ?? 'Not provided'}`,
     `Square feet: ${lead.squareFeet ?? 'Not provided'}`,`Monthly rent: ${lead.monthlyRent ?? 'Not provided'}`,'',`Message: ${lead.comments || 'No additional message'}`];
   if (lead.calculator) notes.push('',`CALCULATOR: ${lead.calculator.name}`,'Estimates supplied by visitor; scenario assumptions, not a quote.','INPUTS',...lead.calculator.inputs.map(e=>`${e.label}: ${e.value}`),'RESULTS',...lead.calculator.results.map(e=>`${e.label}: ${e.value}`));
   const text = notes.join('\n');
@@ -90,7 +90,7 @@ export function prepareCard(fields, lead) {
   if (lead.address) card[fieldKey(address)] = address.type === 'address' ? {address:lead.address,street:lead.address,formattedAddress:lead.address} : lead.address;
   const mappings = [
     [['Desired Management Service','Services','Service','Owner Goal','Goal','Desired Service','Service Requested'],lead.goal],
-    [['Property Type'],lead.propertyType], [['Bed Count','Bedrooms','Beds','Number of Bedrooms'],lead.bedrooms],
+    [['Property Status'],lead.propertyStatus], [['Property Type'],lead.propertyType], [['Bed Count','Bedrooms','Beds','Number of Bedrooms'],lead.bedrooms],
     [['Bath Count','Bathrooms','Baths','Number of Bathrooms'],lead.bathrooms], [['Square Feet','Square Footage','Sq Ft'],lead.squareFeet],
     [['Monthly Rent','Expected Monthly Rent','Market Rent','Rent'],lead.monthlyRent],
     [['Email'],lead.email],[['Phone','Mobile Phone'],lead.phone],[['Source','Lead Source'],'Website'],
@@ -136,7 +136,7 @@ export function publicChoices(fields) {
     const values = [field.data,field.options,field.values,field.choices].find(Array.isArray) || [];
     return values.filter(v => !v?.archived).map(v=>typeof v==='string'?v:v.label ?? v.name ?? v.title ?? v.value).filter(v=>typeof v==='string').slice(0,100);
   }
-  return {services:choices(['Desired Management Service','Services','Service','Owner Goal','Goal','Desired Service','Service Requested']),propertyTypes:choices(['Property Type'])};
+  return {services:choices(['Desired Management Service','Services','Service','Owner Goal','Goal','Desired Service','Service Requested']),propertyTypes:choices(['Property Type']),propertyStatuses:choices(['Property Status'])};
 }
 export async function loadFields(token) {
   const [schema,configuration] = await Promise.all([aptly(`/api/schema/${BOARD_ID}`,token),aptly(`/api/board/${BOARD_ID}/configuration`,token)]);

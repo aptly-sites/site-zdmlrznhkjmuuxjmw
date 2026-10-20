@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {fieldsFrom,prepareCard,normalizeLead,selectValue,BOARD_ID} from '../functions/_lib/owner-leads.js';
 import {onRequestPost} from '../functions/api/owner-lead.js';
 const fields = [
+ {key:'occupancy',label:'Property Status',type:'singleselect',optional:false,data:[{label:'Vacant'}]},
  {key:'address',label:'Rental Property Address',type:'address'},
  {key:'owners',label:'Owner',type:'persons'},
  {key:'notes',label:'Notes',type:'rich-text'},
@@ -13,7 +14,7 @@ const fields = [
  {key:'type',label:'Property Type',type:'singleselect',data:[{label:'Single Family Home'}]},
  {key:'services',label:'Desired Management Service',type:'multiselect',optional:false,data:[{label:'Leasing + Monthly Management Service'}]}
 ];
-const body={firstName:'Test',lastName:'Owner',email:'test@example.com',phone:'2025550100',termsAccepted:true,address:'123 Test St, Temple, TX',goal:'Leasing + Monthly Management Service',propertyType:'Single Family Home',bedrooms:'3',bathrooms:'2.5',squareFeet:'1800',monthlyRent:'2300',formSource:'Rent vs. Sell Calculator',pageTitle:'Rent vs. Sell',pageUrl:'https://example.com/owners/calculators/rent-vs-sell/?email=private',comments:'Keep my message <script>alert(1)</script>',includeCalculator:true,calculator:{name:'Rent vs. Sell',inputs:[{label:'Current value',value:'325000'}],results:[{label:'Advantage',value:'$42,000'}]}};
+const body={firstName:'Test',lastName:'Owner',email:'test@example.com',phone:'2025550100',termsAccepted:true,address:'123 Test St, Temple, TX',goal:'Leasing + Monthly Management Service',propertyStatus:'Vacant',propertyType:'Single Family Home',bedrooms:'3',bathrooms:'2.5',squareFeet:'1800',monthlyRent:'2300',formSource:'Rent vs. Sell Calculator',pageTitle:'Rent vs. Sell',pageUrl:'https://example.com/owners/calculators/rent-vs-sell/?email=private',comments:'Keep my message <script>alert(1)</script>',includeCalculator:true,calculator:{name:'Rent vs. Sell',inputs:[{label:'Current value',value:'325000'}],results:[{label:'Advantage',value:'$42,000'}]}};
 const request=(b=body,headers={})=>new Request('https://example.com/api/owner-lead',{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(b)});
 test('merge schema and configuration without dropping option data',()=>{
  const merged=fieldsFrom([{key:'stage',label:'Stage',type:'stageselect'}],{data:{fields:[{uuid:'stage',data:[{label:'New Leads'}]}]}});
@@ -28,7 +29,7 @@ test('map confirmed Qualification labels, option labels, address, source and cal
 });
 test('calculator opt out removes all estimate details',()=>assert.equal(normalizeLead({...body,includeCalculator:false},request()).calculator,null));
 test('unknown enum is omitted; missing required enum fails before contact creation',()=>{
- assert.equal(selectValue(fields[9],'Unknown'),undefined);
+ assert.equal(selectValue(fields.find(f=>f.key==='type'),'Unknown'),undefined);
  assert.throws(()=>prepareCard(fields,normalizeLead({...body,goal:'Unknown'},request())),/required board option/);
 });
 test('missing New Leads stage fails rather than silently using a default',()=>assert.throws(()=>prepareCard(fields.map(f=>f.key==='stage'?{...f,data:[{label:'New Lead'}]}:f),normalizeLead(body,request())),/New Leads/));

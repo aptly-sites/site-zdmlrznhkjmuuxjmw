@@ -7,7 +7,7 @@ export async function onRequestGet({env}) {
     const fields=await loadFields(token);
     const choices=publicChoices(fields);
     // Verify routing and required field mapping without creating any contacts or cards.
-    prepareCard(fields,{firstName:'Configuration',lastName:'Check',goal:choices.services[0] || '',pageUrl:'',formSource:'',address:'',comments:''});
+    prepareCard(fields,{firstName:'Configuration',lastName:'Check',goal:choices.services[0] || '',propertyStatus:choices.propertyStatuses[0] || '',propertyType:choices.propertyTypes[0] || '',pageUrl:'',formSource:'',address:'',comments:''});
     return Response.json({ready:true,...choices},{headers});
   } catch(error) {
     console.error('Owner lead setup:',error.message);

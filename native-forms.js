@@ -26,7 +26,7 @@
       for (const [name,values] of [['goal',config.services],['propertyType',config.propertyTypes],['propertyStatus',config.propertyStatuses]]) {
         if (!values?.length) continue;
         const select=form.elements[name], previous=select.value;
-        select.replaceChildren(new Option(name==='goal'?'Select a service':'Select if known',''),...values.map(v=>new Option(v,v)));
+        select.replaceChildren(new Option(name==='goal'?'Select a service':name==='propertyStatus'?'Select property status':'Select if known',''),...values.map(v=>new Option(v,v)));
         if (values.includes(previous)) select.value=previous;
       }
     });

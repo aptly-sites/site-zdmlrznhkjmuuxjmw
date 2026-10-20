@@ -41,15 +41,9 @@ async function fetchShell(env, base) {
   return res.ok ? res.text() : null;
 }
 
-// The shell's <head> has no plain <title>/<meta description>/<link canonical> — like
-// the real <main> content, the app delivers page metadata via the same streaming
-// reveal mechanism (generateMetadata()'s output arrives as a hidden, out-of-band
-// <title>/<meta>/<link> data island in the body, not inline in the initial head).
-// replaceOrInsert's regexes match that out-of-band copy (wherever it landed) and
-// overwrite it in place; the insert-before-</head> fallback only fires if a shell is
-// ever reused where that out-of-band chunk is missing entirely.
+// Move listing metadata into the initial head so non-JavaScript crawlers can read it.
 function replaceOrInsert(html, pattern, tag) {
-  return pattern.test(html) ? html.replace(pattern, tag) : html.replace('</head>', `${tag}</head>`);
+  return html.replace(pattern, '').replace('</head>', `${tag}</head>`);
 }
 function withMeta(shell, meta) {
   let html = shell;
@@ -89,6 +83,7 @@ export async function onRequest({ request, next, env }) {
 
   const meta = renderHomeMeta(detail, id);
   const page = withMeta(shell, meta).replace(MAIN_CONTENT_PATTERN, renderHomeDetail(detail, related));
+  headers['X-Robots-Tag'] = 'index, follow';
 
   if (request.method === 'HEAD') return new Response(null, { headers });
   return new Response(page, { headers });

@@ -50,3 +50,17 @@ main img[src*="/images/office.webp"],main img[src*="/images/spradley-office-cont
 @media(max-width:520px){.footer-social{max-width:190px}}
 .team-portrait img.team-original-photo{width:100%;height:100%;object-fit:cover;object-position:50% 25%}
 .team-photo-placeholder{display:flex;align-items:center;justify-content:center;background:#e0d8d3;color:#8e2923;font-size:48px;font-weight:600;width:100%;height:100%}
+
+/* Keep controls usable on touch screens and avoid iOS input-focus zoom. */
+@media(max-width:1024px){
+  main input,main select,main textarea{font-size:16px!important}
+  .footer-social a,.business-actions a{min-height:44px;display:inline-flex!important;align-items:center}
+  main summary{min-height:44px;padding-block:12px}
+}
+:where(main,footer) a:focus-visible,:where(main,footer) button:focus-visible{
+  outline:3px solid #b71c24;outline-offset:4px
+}
+/* Improve legibility over the video's embedded titles on narrow screens. */
+@media(max-width:600px){
+  .film-hero .hero-shade{background:linear-gradient(180deg,rgba(0,0,0,.06) 20%,rgba(0,0,0,.45) 45%,rgba(0,0,0,.88) 75%,#191919 100%)}
+}

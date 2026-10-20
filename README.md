@@ -153,3 +153,33 @@ PREVIEW_URL=http://127.0.0.1:4180 node tests/browser-forms.cjs
 The browser check needs Playwright and Chrome. It intercepts lead/configuration
 requests with fixtures and does not create real contacts or cards. A live lead
 check is a separate, clearly labeled test on the hosted site.
+
+## Search and responsive review (October 20, 2026)
+
+- Permanent canonical origin: `https://spradleyproperties.com` (confirmed by owner).
+- All 24 static pages include metadata in the initial head, Open Graph tags,
+  business/page/breadcrumb structured data, and FAQ data where HTML answers exist.
+- `seo-metadata.js` preserves that metadata when the existing exported components
+  hydrate. When editing metadata, update the head and `spradleyPageMetadata`
+  configuration together. Existing RSC metadata should remain consistent as well.
+- `robots.txt` and `sitemap.xml` cover public static routes. Live rental details
+  now allow indexing when found; missing/error responses remain noindex.
+- Eight photographic PNG URLs redirect to smaller JPEG equivalents through
+  `_redirects`: 16,929,300 bytes reduced to 3,836,800 bytes (77.3%). Original
+  assets are retained. The preview runtime must restart to load new redirects.
+- Reviewed all 24 pages at 320px and 768px, plus eight key pages at 390px and
+  1024px. No horizontal document overflow was observed. Checked mobile menu
+  opening and settled rental-search rendering. Inputs use at least 16px on
+  mobile/tablet to avoid iOS focus zoom; key touch targets are at least 44px.
+- Metadata/JSON-LD parsing, internal static link targets, image redirects, and
+  successful rental-detail index headers were checked locally. Eleven owner-lead
+  tests passed; this review did not submit another live lead.
+- A Lighthouse/Core Web Vitals score is not available: the public PageSpeed API
+  returned a quota error. Responsive emulation is not physical-device testing.
+
+Launch follow-up: verify canonical-domain routing and legacy URL redirects, submit
+`https://spradleyproperties.com/sitemap.xml` in Google Search Console and Bing
+Webmaster Tools, then measure real-user performance and search/AI citations.
+The sitemap currently covers static pages, not the changing rental inventory.
+Structured data helps describe the site; it does not guarantee rich results or
+citations in AI answers. Keep school, listing, business, and review content current.

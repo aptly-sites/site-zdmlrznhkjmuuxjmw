@@ -113,7 +113,7 @@ function renderListingCardMini(l) {
 
 // Mirrors generateMetadata() from app/homes/[id]/page.tsx.
 export function renderHomeMeta(detail, id) {
-  const url = 'https://spradley-properties.sshekou.chatgpt.site/homes/' + id;
+  const url = 'https://spradleyproperties.com/homes/' + id;
   if (!detail) {
     return { title: 'Rental home', description: 'Find your next home with Spradley Properties.', canonical: url, ogImage: '' };
   }
@@ -151,7 +151,7 @@ export function renderHomeDetail(detail, related) {
     '@context': 'https://schema.org',
     '@type': 'RealEstateListing',
     name: address,
-    url: 'https://spradley-properties.sshekou.chatgpt.site/homes/' + l.id,
+    url: 'https://spradleyproperties.com/homes/' + l.id,
     description,
     image: photos.slice(0, 4),
     ...(l.rent !== null ? { offers: { '@type': 'Offer', price: l.rent, priceCurrency: 'USD', businessFunction: 'http://purl.org/goodrelations/v1#LeaseOut' } } : {})
